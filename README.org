@@ -1,0 +1,16 @@
+* gsql.el
+  TigerGraph's GSQL language syntax highlighting
+
+** Installation
+   This package is not yet ready for ELPA/MELPA as a package.
+
+   Simply run =M-x eval-buffer= while visiting [[file:gsql-mode.el][gsql-mode.el]], or load it from Dired or
+   using Emacs lisp
+
+
+** Usage
+   Open a GSQL file that ends in =.gsql=, or activate SQL mode with =M-x sql-mode= and
+   then =M-x sql-set-product= and choose =gsql=
+
+** License
+  
