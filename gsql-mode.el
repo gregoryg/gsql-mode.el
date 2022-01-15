@@ -13,31 +13,31 @@
 
 ;;; Code:
 ;; Here are the various faces that can be used by sql-font-lock-keywords-builder
-     ;; 10 'font-lock-builtin-face
-     ;;  1 'font-lock-comment-face
-     ;;  2 'font-lock-doc-face
-     ;;  1 'font-lock-function-name-face
-     ;; 12 'font-lock-keyword-face
-     ;;  1 'font-lock-preprocessor-face
-     ;;  8 'font-lock-type-face
-     ;;  1 'font-lock-variable-name-face
-     ;;  1 'font-lock-warning-face
+;; 10 'font-lock-builtin-face
+;;  1 'font-lock-comment-face
+;;  2 'font-lock-doc-face
+;;  1 'font-lock-function-name-face
+;; 12 'font-lock-keyword-face
+;;  1 'font-lock-preprocessor-face
+;;  8 'font-lock-type-face
+;;  1 'font-lock-variable-name-face
+;;  1 'font-lock-warning-face
 
 
 (require 'sql)
 ;; (require 'newcomment)
-   ;; '("\/\*\(.*\n\)+? *\*\/" . font-lock-comment-face)
-   ;; '(" "
+;; '("\/\*\(.*\n\)+? *\*\/" . font-lock-comment-face)
+;; '(" "
 ;; /\*\(.\|
 ;; \)+?\*/
-   ;; '("/\\*\\(.\\|^J\\)+? *\\*/" . font-lock-comment-face)
+;; '("/\\*\\(.\\|^J\\)+? *\\*/" . font-lock-comment-face)
 
 (defvar gsql-mode-font-lock-keywords
   (list
    ;; '("#.*" . font-lock-comment-face)
    ;; '("/\\*\\(.\\|\n\\)*?\\*/" . font-lock-comment-face)
 
-   ;; '("@[a-zA-Z0-9_]*" . font-lock-variable-name-face)
+   ;; '("@@[a-zA-Z0-9_]*" . font-lock-variable-name-face)
    (sql-font-lock-keywords-builder 'font-lock-type-face nil
                                    "bool" "datetime" "double" "float" "int" "list" "map" "set" "string" "tuple" "uint"  )
    (sql-font-lock-keywords-builder 'font-lock-builtin-face nil
@@ -69,18 +69,68 @@
                                    "upper" "year"
                                    )
    (sql-font-lock-keywords-builder 'font-lock-keyword-face nil
-                                   "abort" "add" "alter" "batch" "begin" "create" "define" "delete" "directed" "distributed" "drop" "edge" "end" "eol" "export" "filename" "get" "global" "graph" "header" "install" "job" "load" "loading" "put" "query" "run" "schema_change" "separator" "undirected" "use" "user_defined_header" "upsert" "using" "version" "vertex")))
+                                   "abort" "accum" "add" "alter" "batch" "begin" "create" "define" "delete" "directed" "distributed" "drop" "edge" "end"
+                                   "eol" "export" "filename" "get" "global" "graph" "header" "heap-accum" "install" "job" "list-accum" "load" "loading"
+                                   "max-accum" "post-accum" "print" "put" "query" "run" "schema_change" "separator" "set-accum" "sum-accum" "undirected"
+                                   "use" "user_defined_header" "upsert" "using" "version" "vertex")))
+
+;; Interactive definition
+(defcustom sql-gsql-program (or (executable-find "gsql")
+                                "gsql")
+  "Command to start the GSQL CLI"
+  :type 'file)
+
+(defcustom sql-gsql-login-params '(user password graph server)
+  "List of login parameters needed to connect to GSQL and select a graph"
+  :type 'sql-login-params
+  :version "3.4.0")
+
+(defcustom sql-gsql-options nil
+  "List of additional options for `sql-gsql-program'."
+  :type '(repeat string)
+  :version "3.4.0")
+
+(defcustom sql-gsql-user "tigergraph"
+  "User for interactive usage with GSQL CLI."
+  :type 'string
+  :version "3.4.0")
+
+(defcustom sql-gsql-graph ""
+  "Graph to use with GSQL CLI - defaults to null graph, meaning GLOBAL context."
+  :type 'string
+  :version "3.4.0")
+
+(defun sql-gsql (&optional buffer)
+  "Run gsql CLI as an inferior process"
+  (interactive "P")
+  (sql-product-interactive 'gsql buffer))
+
+(defun sql-comint-gsql (product options &optional buf-name)
+  "Create a comint buffer and connect to GSQL."
+  ;; (sql-comint product '((concat "--user=" sql-gsql-user) (concat"--graph=" sql-gsql-graph)))
+  (sql-comint product '("-user" "tigergraph"))
+  )
+
 
 (sql-add-product
-  'gsql "GSQL"
-  :font-lock 'gsql-mode-font-lock-keywords
-  :syntax-alist '((?\" . "\"")
-                  (?- . "@") ;;- is no longer a comment character; inherit from standard syntax table
-                  (?/ . ". 12b")
-                  ))
+ 'gsql "GSQL"
+ :free-software nil
+ :sqli-program sql-gsql-program
+ :font-lock gsql-mode-font-lock-keywords
+ :sqli-login sql-gsql-login-params
+ :sqli-options sql-gsql-options
+ :sqli-comint-func 'sql-comint-gsql
+ :prompt-regexp "^.*GSQL > "
+ :terminator
+ ;; :syntax-alist '((?\" . "\"")
+ ;;                 (?- . "@") ;;- is no longer a comment character; inherit from standard syntax table
+ ;;                 (?/ . ". 12b")
+ ;;                 )
+ )
 
 (add-to-list 'auto-mode-alist '("\\.gsql\\'" . (lambda ()
                                                  (sql-mode)
                                                  (sql-set-product 'gsql))))
+
 (provide 'gsql)
 ;;; gsql.el ends here
