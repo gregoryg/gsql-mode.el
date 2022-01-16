@@ -70,13 +70,14 @@
                                    )
    (sql-font-lock-keywords-builder 'font-lock-keyword-face nil
                                    "abort" "accum" "add" "alter" "batch" "begin" "create" "define" "delete" "directed" "distributed" "drop" "edge" "end"
-                                   "eol" "export" "filename" "get" "global" "graph" "header" "heap-accum" "install" "job" "list-accum" "load" "loading"
-                                   "max-accum" "post-accum" "print" "put" "query" "run" "schema_change" "separator" "set-accum" "sum-accum" "undirected"
+                                   "eol" "export" "filename" "get" "global" "graph" "header" "heapaccum" "install" "job" "listaccum" "load" "loading" "mapaccum"
+                                   "max-accum" "post-accum" "print" "put" "query" "run" "schema_change" "separator" "setaccum" "sumaccum" "typedef" "undirected"
                                    "use" "user_defined_header" "upsert" "using" "version" "vertex")))
 
 ;; Interactive definition
-(defcustom sql-gsql-program (or (executable-find "gsql")
-                                "gsql")
+;; (defcustom sql-gsql-program (or (executable-find "gsql")
+;;                                 "gsql")
+(defcustom sql-gsql-program "gsql"
   "Command to start the GSQL CLI"
   :type 'file)
 
@@ -131,6 +132,6 @@
 (add-to-list 'auto-mode-alist '("\\.gsql\\'" . (lambda ()
                                                  (sql-mode)
                                                  (sql-set-product 'gsql))))
-
+;(add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
 (provide 'gsql)
 ;;; gsql.el ends here
