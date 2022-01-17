@@ -70,8 +70,10 @@
                                    )
    (sql-font-lock-keywords-builder 'font-lock-keyword-face nil
                                    "abort" "accum" "add" "alter" "batch" "begin" "create" "define" "delete" "directed" "distributed" "drop" "edge" "end"
-                                   "eol" "export" "filename" "get" "global" "graph" "header" "heapaccum" "install" "job" "listaccum" "load" "loading" "mapaccum"
-                                   "max-accum" "post-accum" "print" "put" "query" "run" "schema_change" "separator" "setaccum" "show" "sumaccum" "typedef"
+                                   "eol" "export" "exprfunctions" "exprutil" "filename" "get" "global" "graph" "header" "heapaccum" "install" "job"
+                                   "listaccum" "load" "loading" "mapaccum"
+                                   "max-accum" "post-accum" "print" "put" "query" "run" "schema_change" "separator" "setaccum" "show" "sumaccum"
+                                   "tokenbank" "typedef"
                                    "undirected" "use" "user_defined_header" "upsert" "using" "version" "vertex")))
 
 ;; Interactive definition
