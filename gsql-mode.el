@@ -9,7 +9,6 @@
 ;;; Commentary:
 
 ;; This package adds GSQL to the sql-mode product list.
-;; TODO: Add support for a comint buffer to GSQL CLI
 
 ;;; Code:
 ;; Here are the various faces that can be used by sql-font-lock-keywords-builder
