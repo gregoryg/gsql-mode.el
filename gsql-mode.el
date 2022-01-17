@@ -71,8 +71,8 @@
    (sql-font-lock-keywords-builder 'font-lock-keyword-face nil
                                    "abort" "accum" "add" "alter" "batch" "begin" "create" "define" "delete" "directed" "distributed" "drop" "edge" "end"
                                    "eol" "export" "filename" "get" "global" "graph" "header" "heapaccum" "install" "job" "listaccum" "load" "loading" "mapaccum"
-                                   "max-accum" "post-accum" "print" "put" "query" "run" "schema_change" "separator" "setaccum" "sumaccum" "typedef" "undirected"
-                                   "use" "user_defined_header" "upsert" "using" "version" "vertex")))
+                                   "max-accum" "post-accum" "print" "put" "query" "run" "schema_change" "separator" "setaccum" "show" "sumaccum" "typedef"
+                                   "undirected" "use" "user_defined_header" "upsert" "using" "version" "vertex")))
 
 ;; Interactive definition
 ;; (defcustom sql-gsql-program (or (executable-find "gsql")
@@ -81,7 +81,7 @@
   "Command to start the GSQL CLI"
   :type 'file)
 
-(defcustom sql-gsql-login-params '(user password graph server)
+(defcustom sql-gsql-login-params '(user password database)
   "List of login parameters needed to connect to GSQL and select a graph"
   :type 'sql-login-params
   :version "3.4.0")
@@ -108,9 +108,19 @@
 
 (defun sql-comint-gsql (product options &optional buf-name)
   "Create a comint buffer and connect to GSQL."
+  ;; TODO: deal with nonstandard gsPort - is there an option using local gsql cmd?
   ;; (sql-comint product '((concat "--user=" sql-gsql-user) (concat"--graph=" sql-gsql-graph)))
-  (sql-comint product '("-user" "tigergraph"))
-  )
+  (let ((params
+         (append
+          options
+          (if (not (string= "" sql-user))
+              (list (concat "-u" sql-user)))
+          (if (not (string= "" sql-password))
+              (list (concat "-p" sql-password)))
+          (if (not (string= "" sql-database))
+              (list (concat "-g" sql-database))))))
+    (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
+    (sql-comint product params buf-name)))
 
 
 (sql-add-product
