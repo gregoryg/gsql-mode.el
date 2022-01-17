@@ -1,5 +1,5 @@
-* gsql.el
-  TigerGraph's GSQL language syntax highlighting
+* gsql-mode.el
+  TigerGraph's GSQL language syntax highlighting for Emacs
 
 ** Installation
    This package is not yet ready for ELPA/MELPA as a package.
@@ -12,5 +12,5 @@
    Open a GSQL file that ends in =.gsql=, or activate SQL mode with =M-x sql-mode= and
    then =M-x sql-set-product= and choose =gsql=
 
+   This mode supports interaction using the =gsql= command line.
 ** License
-  
