@@ -33,6 +33,7 @@
 
 (defvar gsql-mode-font-lock-keywords
   (list
+   ;; '("\\".*\\"" . font-lock-string-face)
    ;; '("#.*" . font-lock-comment-face)
    ;; '("/\\*\\(.\\|\n\\)*?\\*/" . font-lock-comment-face)
 
@@ -69,7 +70,7 @@
                                    )
    (sql-font-lock-keywords-builder 'font-lock-keyword-face nil
                                    "abort" "accum" "add" "alter" "batch" "begin" "create" "define" "delete" "directed" "distributed" "drop" "edge" "end"
-                                   "eol" "export" "exprfunctions" "exprutil" "filename" "get" "global" "graph" "header" "heapaccum" "install" "job"
+                                   "eol" "export" "exprfunctions" "exprutil" "filename" "get" "global" "graph" "header" "heapaccum" "if" "install" "job"
                                    "listaccum" "load" "loading" "mapaccum"
                                    "max-accum" "post-accum" "print" "put" "query" "run" "schema_change" "separator" "setaccum" "show" "sumaccum"
                                    "tokenbank" "typedef"
@@ -109,7 +110,7 @@
 
 (defun sql-comint-gsql (product options &optional buf-name)
   "Create a comint buffer and connect to GSQL."
-  ;; TODO: deal with nonstandard gsPort - is there an option using local gsql cmd?
+ ;; TODO: deal with nonstandard gsPort - is there an option using local gsql cmd?
   ;; (sql-comint product '((concat "--user=" sql-gsql-user) (concat"--graph=" sql-gsql-graph)))
   (let ((params
          (append
