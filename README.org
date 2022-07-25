@@ -14,3 +14,5 @@
 
    This mode supports interaction using the =gsql= command line.
 ** License
+* TOTALLY UNNECESSARY THING
+  that's this thing
